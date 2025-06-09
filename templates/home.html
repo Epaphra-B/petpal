@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to PetPal{% endblock %}
+{% block content %}
+<div class="landing-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge">Your Pet's Best Friend</div>
+            <h1 class="hero-title">Welcome to PetPal</h1>
+            <p class="hero-subtitle">Your digital companion for pet care management</p>
+            {% if not current_user.is_authenticated %}
+            <div class="hero-cta">
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Get Started</a>
+                <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg">Learn More</a>
+            </div>
+            {% endif %}
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1000+</span>
+                    <span class="stat-label">Happy Pets</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Care Support</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Satisfaction</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2 class="section-title">Why Choose PetPal?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Smart Reminders</h3>
+                <p>Never miss a vet appointment or medication time with our intelligent reminder system.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>Health Tracking</h3>
+                <p>Keep track of your pet's health records, vaccinations, and medical history in one place.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Care Checklist</h3>
+                <p>Manage daily care tasks and routines to ensure your pet's well-being.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Expert Tips</h3>
+                <p>Get personalized care advice and tips based on your pet's species and needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Create Your Account</h3>
+                <p>Sign up for free and start managing your pet's care journey.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Add Your Pets</h3>
+                <p>Add your furry friends and their details to your profile.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Start Managing</h3>
+                <p>Set up reminders, track health records, and get care tips.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Give Your Pet the Best Care?</h2>
+            <p>Join thousands of pet owners who trust PetPal for their pet care management.</p>
+            {% if not current_user.is_authenticated %}
+            <div class="cta-buttons">
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Sign Up Now</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

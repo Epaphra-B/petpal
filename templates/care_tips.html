@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Care Tips for {{ pet.name }}{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Care Tips for {{ pet.name }}</h1>
+        <p class="page-subtitle">Essential care guidelines for your beloved pet</p>
+    </div>
+    <div class="tips-container">
+        <div class="tips-card">
+            <div class="tips-header">
+                <i class="fas fa-paw tips-icon"></i>
+                <h2>Essential Care Tips</h2>
+            </div>
+            <div class="tips-list">
+                {% for tip in tips %}
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle tip-icon"></i>
+                        <span>{{ tip }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="action-buttons">
+            <a href="{{ url_for('pet_detail', pet_id=pet.id) }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Pet Details
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

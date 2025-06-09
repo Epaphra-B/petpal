@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            {% set current_hour = now.hour %}
+            {% if current_hour < 12 %}
+                <h1>Good morning, {{ current_user.name }}!</h1>
+            {% elif current_hour < 17 %}
+                <h1>Good afternoon, {{ current_user.name }}!</h1>
+            {% else %}
+                <h1>Good evening, {{ current_user.name }}!</h1>
+            {% endif %}
+            <p class="dashboard-subtitle">Manage your pets and stay on top of their care</p>
+        </div>
+        <a href="{{ url_for('add_pet') }}" class="btn btn-primary add-pet-btn">
+            <i class="fas fa-plus"></i> Add New Pet
+        </a>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon pets-icon">
+                <i class="fas fa-paw"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ pets|length }}</h3>
+                <p>Total Pets</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon reminders-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ reminders|length }}</h3>
+                <p>Upcoming Tasks</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-grid">
+        <!-- Pets Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2><i class="fas fa-paw"></i> Your Pets</h2>
+            </div>
+            <div class="pets-grid">
+                {% for pet in pets %}
+                <div class="pet-card">
+                    <div class="pet-card-header">
+                        <h3>{{ pet.name }}</h3>
+                        <span class="pet-species">{{ pet.species }}</span>
+                    </div>
+                    <div class="pet-card-body">
+                        <p class="pet-breed">{{ pet.breed }}</p>
+                        <a href="{{ url_for('pet_detail', pet_id=pet.id) }}" class="btn btn-outline-primary view-details-btn">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Reminders Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2><i class="fas fa-bell"></i> Upcoming Reminders</h2>
+            </div>
+            <div class="reminders-list">
+                {% for reminder in reminders %}
+                <div class="reminder-card">
+                    <div class="reminder-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="reminder-content">
+                        <h4>{{ reminder.task }}</h4>
+                        <p class="reminder-pet">For: {{ reminder.pet.name }}</p>
+                        <p class="reminder-date">Due: {{ reminder.due_date.strftime('%B %d, %Y') }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

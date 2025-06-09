@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}{{ pet.name }}{% endblock %}
+{% block content %}
+<div class="pet-detail-container">
+    <!-- Pet Header Section -->
+    <div class="pet-header">
+        <div class="pet-header-content">
+            <h1>{{ pet.name }}</h1>
+            <div class="pet-badges">
+                <span class="pet-badge species-badge">
+                    <i class="fas fa-paw"></i> {{ pet.species }}
+                </span>
+                {% if pet.breed %}
+                <span class="pet-badge breed-badge">
+                    <i class="fas fa-dna"></i> {{ pet.breed }}
+                </span>
+                {% endif %}
+                {% if pet.age %}
+                <span class="pet-badge age-badge">
+                    <i class="fas fa-birthday-cake"></i> {{ pet.age }} years
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        <a href="{{ url_for('edit_pet', pet_id=pet.id) }}" class="btn btn-outline-primary edit-pet-btn">
+            <i class="fas fa-edit"></i> Edit Pet
+        </a>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="pet-detail-grid">
+        <!-- Left Column - Pet Photo and Info -->
+        <div class="pet-photo-section">
+            {% if pet.photo %}
+            <div class="pet-photo-container">
+                <img src="{{ url_for('static', filename='images/' + pet.photo) }}" class="pet-photo" alt="{{ pet.name }}">
+            </div>
+            {% else %}
+            <div class="pet-photo-placeholder">
+                <i class="fas fa-paw"></i>
+                <p>No photo available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column - Quick Actions -->
+        <div class="pet-actions-section">
+            <div class="action-cards">
+                <a href="{{ url_for('health_record', pet_id=pet.id) }}" class="action-card health-card">
+                    <div class="action-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="action-content">
+                        <h3>Health Records</h3>
+                        <p>Track medical history and appointments</p>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('reminders', pet_id=pet.id) }}" class="action-card reminder-card">
+                    <div class="action-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="action-content">
+                        <h3>Reminders</h3>
+                        <p>Set up care reminders and schedules</p>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('checklist', pet_id=pet.id) }}" class="action-card checklist-card">
+                    <div class="action-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="action-content">
+                        <h3>Checklist</h3>
+                        <p>Manage daily care tasks</p>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('care_tips', pet_id=pet.id) }}" class="action-card tips-card">
+                    <div class="action-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="action-content">
+                        <h3>Care Tips</h3>
+                        <p>Get personalized care advice</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

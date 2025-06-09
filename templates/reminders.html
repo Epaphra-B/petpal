@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Reminders for {{ pet.name }}{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Reminders for {{ pet.name }}</h1>
+        <p class="page-subtitle">Manage your pet's important dates and tasks</p>
+    </div>
+    <div class="reminders-container">
+        <div class="reminders-card">
+            <div class="reminders-header">
+                <i class="fas fa-bell reminders-icon"></i>
+                <h2>Add New Reminder</h2>
+            </div>
+            <form method="POST" class="reminders-form">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.task.label(class="form-label") }}
+                    {{ form.task(class="form-control", placeholder="Enter reminder task") }}
+                </div>
+                <div class="form-group">
+                    {{ form.due_date.label(class="form-label") }}
+                    {{ form.due_date(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.recurring.label(class="form-label") }}
+                    {{ form.recurring(class="form-control") }}
+                </div>
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            </form>
+        </div>
+
+        <div class="reminders-list-card">
+            <div class="reminders-list-header">
+                <i class="fas fa-list reminders-list-icon"></i>
+                <h2>Existing Reminders</h2>
+            </div>
+            <div class="reminders-list">
+                {% for reminder in reminders %}
+                    <div class="reminder-item">
+                        <div class="reminder-content">
+                            <i class="fas fa-calendar-alt reminder-icon"></i>
+                            <div class="reminder-details">
+                                <h3>{{ reminder.task }}</h3>
+                                <p class="reminder-date">
+                                    <i class="fas fa-clock me-1"></i>Due: {{ reminder.due_date }}
+                                </p>
+                                <p class="reminder-recurring">
+                                    <i class="fas fa-sync-alt me-1"></i>Recurring: {{ reminder.recurring }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('pet_detail', pet_id=pet.id) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Pet Details
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

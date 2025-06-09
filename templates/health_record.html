@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Health Records for {{ pet.name }}{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Health Records for {{ pet.name }}</h1>
+        <p class="page-subtitle">Track and manage your pet's health information</p>
+    </div>
+    <div class="health-container">
+        <div class="health-card">
+            <div class="health-header">
+                <i class="fas fa-heartbeat health-icon"></i>
+                <h2>Add New Record</h2>
+            </div>
+            <form method="POST" class="health-form">
+                {{ form.hidden_tag() }}
+                <div class="form-grid">
+                    <div class="form-group">
+                        {{ form.type.label(class="form-label") }}
+                        {{ form.type(class="form-control", placeholder="Enter record type") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.date.label(class="form-label") }}
+                        {{ form.date(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.weight.label(class="form-label") }}
+                        {{ form.weight(class="form-control", placeholder="Enter weight") }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.details.label(class="form-label") }}
+                    {{ form.details(class="form-control", placeholder="Enter details", rows="3") }}
+                </div>
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            </form>
+        </div>
+
+        <div class="records-card">
+            <div class="records-header">
+                <i class="fas fa-clipboard-list records-icon"></i>
+                <h2>Health History</h2>
+            </div>
+            <div class="records-list">
+                {% for record in records %}
+                    <div class="record-item">
+                        <div class="record-content">
+                            <div class="record-header">
+                                <i class="fas fa-file-medical record-icon"></i>
+                                <h3>{{ record.type }}</h3>
+                                <span class="record-date">{{ record.date }}</span>
+                            </div>
+                            <div class="record-details">
+                                <p class="record-weight">
+                                    <i class="fas fa-weight me-1"></i>Weight: {{ record.weight }}
+                                </p>
+                                <p class="record-info">{{ record.details }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('pet_detail', pet_id=pet.id) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Pet Details
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
