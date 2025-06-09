@@ -1,92 +1,491 @@
 {% extends 'base.html' %}
 {% block title %}{{ pet.name }}{% endblock %}
 {% block content %}
-<div class="pet-detail-container">
-    <!-- Pet Header Section -->
-    <div class="pet-header">
-        <div class="pet-header-content">
-            <h1>{{ pet.name }}</h1>
-            <div class="pet-badges">
-                <span class="pet-badge species-badge">
-                    <i class="fas fa-paw"></i> {{ pet.species }}
+<div class="pet-dashboard">
+    <!-- Hero Section -->
+    <div class="pet-hero">
+        <div class="pet-hero-content">
+            <div class="pet-profile">
+                {% if pet.photo %}
+                <div class="pet-avatar">
+                    <img src="{{ url_for('static', filename='images/' + pet.photo) }}" alt="{{ pet.name }}" class="profile-image">
+                </div>
+                {% else %}
+                <div class="pet-avatar placeholder">
+                    <i class="fas fa-paw"></i>
+                </div>
+                {% endif %}
+                <div class="pet-info">
+                    <h1 class="pet-name">{{ pet.name }}</h1>
+                    <div class="pet-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-paw"></i>
+                            <span>{{ pet.species }}</span>
                 </span>
                 {% if pet.breed %}
-                <span class="pet-badge breed-badge">
-                    <i class="fas fa-dna"></i> {{ pet.breed }}
+                        <span class="meta-item">
+                            <i class="fas fa-dna"></i>
+                            <span>{{ pet.breed }}</span>
                 </span>
                 {% endif %}
                 {% if pet.age %}
-                <span class="pet-badge age-badge">
-                    <i class="fas fa-birthday-cake"></i> {{ pet.age }} years
+                        <span class="meta-item">
+                            <i class="fas fa-birthday-cake"></i>
+                            <span>{{ pet.age }} years</span>
                 </span>
                 {% endif %}
             </div>
         </div>
-        <a href="{{ url_for('edit_pet', pet_id=pet.id) }}" class="btn btn-outline-primary edit-pet-btn">
-            <i class="fas fa-edit"></i> Edit Pet
-        </a>
+            </div>
+            <a href="{{ url_for('edit_pet', pet_id=pet.id) }}" class="edit-button">
+                <i class="fas fa-edit"></i>
+                <span>Edit Profile</span>
+            </a>
+        </div>
     </div>
 
-    <!-- Main Content Grid -->
-    <div class="pet-detail-grid">
-        <!-- Left Column - Pet Photo and Info -->
-        <div class="pet-photo-section">
-            {% if pet.photo %}
-            <div class="pet-photo-container">
-                <img src="{{ url_for('static', filename='images/' + pet.photo) }}" class="pet-photo" alt="{{ pet.name }}">
+    <!-- Quick Stats Section -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
             </div>
-            {% else %}
-            <div class="pet-photo-placeholder">
-                <i class="fas fa-paw"></i>
-                <p>No photo available</p>
+            <div class="stat-content">
+                <h3>Next Appointment</h3>
+                <p>{{ pet.next_appointment|default('No upcoming appointments', true) }}</p>
             </div>
-            {% endif %}
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-pills"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Medications</h3>
+                <p>{{ pet.active_medications|default('No active medications', true) }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Daily Tasks</h3>
+                <p>{{ pet.pending_tasks|default('No pending tasks', true) }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+        <!-- Pet Details Section -->
+        <div class="dashboard-section details-section">
+            <h2 class="section-title">Pet Details</h2>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <i class="fas fa-weight"></i>
+                    <div class="detail-content">
+                        <h4>Weight</h4>
+                        <p>{{ pet.weight|default('Not specified', true) }}</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-ruler"></i>
+                    <div class="detail-content">
+                        <h4>Size</h4>
+                        <p>{{ pet.size|default('Not specified', true) }}</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-palette"></i>
+                    <div class="detail-content">
+                        <h4>Color</h4>
+                        <p>{{ pet.color|default('Not specified', true) }}</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-venus-mars"></i>
+                    <div class="detail-content">
+                        <h4>Gender</h4>
+                        <p>{{ pet.gender|default('Not specified', true) }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Right Column - Quick Actions -->
-        <div class="pet-actions-section">
-            <div class="action-cards">
-                <a href="{{ url_for('health_record', pet_id=pet.id) }}" class="action-card health-card">
-                    <div class="action-icon">
+        <!-- Health & Wellness Section -->
+        <div class="dashboard-section health-section">
+            <h2 class="section-title">Health & Wellness</h2>
+            <div class="section-cards">
+                <a href="{{ url_for('health_record', pet_id=pet.id) }}" class="dashboard-card health-card">
+                    <div class="card-icon">
                         <i class="fas fa-heartbeat"></i>
                     </div>
-                    <div class="action-content">
+                    <div class="card-content">
                         <h3>Health Records</h3>
-                        <p>Track medical history and appointments</p>
+                        <p>View medical history and upcoming appointments</p>
+                        <span class="card-action">View Records <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
-
-                <a href="{{ url_for('reminders', pet_id=pet.id) }}" class="action-card reminder-card">
-                    <div class="action-icon">
+                <a href="{{ url_for('reminders', pet_id=pet.id) }}" class="dashboard-card reminder-card">
+                    <div class="card-icon">
                         <i class="fas fa-bell"></i>
                     </div>
-                    <div class="action-content">
-                        <h3>Reminders</h3>
-                        <p>Set up care reminders and schedules</p>
+                    <div class="card-content">
+                        <h3>Care Reminders</h3>
+                        <p>Manage medication and care schedules</p>
+                        <span class="card-action">Set Reminders <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
+            </div>
+        </div>
 
-                <a href="{{ url_for('checklist', pet_id=pet.id) }}" class="action-card checklist-card">
-                    <div class="action-icon">
+        <!-- Daily Care Section -->
+        <div class="dashboard-section care-section">
+            <h2 class="section-title">Daily Care</h2>
+            <div class="section-cards">
+                <a href="{{ url_for('checklist', pet_id=pet.id) }}" class="dashboard-card checklist-card">
+                    <div class="card-icon">
                         <i class="fas fa-tasks"></i>
                     </div>
-                    <div class="action-content">
-                        <h3>Checklist</h3>
-                        <p>Manage daily care tasks</p>
+                    <div class="card-content">
+                        <h3>Care Checklist</h3>
+                        <p>Track daily care tasks and routines</p>
+                        <span class="card-action">View Tasks <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
-
-                <a href="{{ url_for('care_tips', pet_id=pet.id) }}" class="action-card tips-card">
-                    <div class="action-icon">
+                <a href="{{ url_for('care_tips', pet_id=pet.id) }}" class="dashboard-card tips-card">
+                    <div class="card-icon">
                         <i class="fas fa-lightbulb"></i>
                     </div>
-                    <div class="action-content">
+                    <div class="card-content">
                         <h3>Care Tips</h3>
                         <p>Get personalized care advice</p>
+                        <span class="card-action">View Tips <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
+            </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="dashboard-section notes-section">
+            <h2 class="section-title">Notes & Special Instructions</h2>
+            <div class="notes-content">
+                {% if pet.notes %}
+                <p>{{ pet.notes }}</p>
+                {% else %}
+                <p class="no-notes">No special notes or instructions added yet.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.pet-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.pet-hero {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.pet-hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pet-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.pet-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+.pet-avatar.placeholder {
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pet-name {
+    font-size: 2.5rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.pet-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+}
+
+.edit-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Stats Section */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #6366f1;
+}
+
+.stat-content h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #6b7280;
+}
+
+.stat-content p {
+    margin: 0.25rem 0 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.dashboard-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+}
+
+/* Details Grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.detail-item i {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #6366f1;
+}
+
+.detail-content h4 {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.detail-content p {
+    margin: 0.25rem 0 0;
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+/* Section Cards */
+.section-cards {
+    display: grid;
+    gap: 1rem;
+}
+
+.dashboard-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    background: #f9fafb;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.health-card .card-icon {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.reminder-card .card-icon {
+    background: #e0f2fe;
+    color: #0ea5e9;
+}
+
+.checklist-card .card-icon {
+    background: #dcfce7;
+    color: #22c55e;
+}
+
+.tips-card .card-icon {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-content h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1f2937;
+}
+
+.card-content p {
+    margin: 0.5rem 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.card-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6366f1;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Notes Section */
+.notes-content {
+    background: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.notes-content p {
+    margin: 0;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+.no-notes {
+    color: #6b7280;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .pet-hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .pet-profile {
+        flex-direction: column;
+    }
+
+    .pet-meta {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-section {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 {% endblock %}
